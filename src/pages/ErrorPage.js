@@ -1,7 +1,15 @@
 import React from 'react';
 
+import Banner from '../components/Banner';
+import Error from '../components/Error';
+
 function ErrorPage() {
-  return <div>ErrorPage</div>;
+  return (
+    <>
+      <Banner />
+      <Error />
+    </>
+  );
 }
 
 export default ErrorPage;

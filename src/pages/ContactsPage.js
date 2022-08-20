@@ -1,7 +1,15 @@
 import React from 'react';
 
+import Banner from '../components/Banner';
+import Contacts from '../components/Contacts';
+
 function ContactsPage() {
-  return <div>ContactsPage</div>;
+  return (
+    <>
+      <Banner />
+      <Contacts />
+    </>
+  );
 }
 
 export default ContactsPage;
