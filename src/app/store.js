@@ -1,6 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-// import counterReducer from '../features/counter/counterSlice';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+// import { categoriesSlice } from '../slices/сategoriesSlice';
+import topSalesSlice from '../slices/topSalesSlice';
 
-// export const store = configureStore({
-//   reducer: {},
-// });
+const reducer = combineReducers({
+  topSales: topSalesSlice,
+});
+
+export const store = configureStore({
+  reducer,
+});
