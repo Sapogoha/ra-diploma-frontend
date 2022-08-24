@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-
 import { Link } from 'react-router-dom';
 
 import { fetchTopSales } from '../../thunks/asyncThunks';
+import Preloader from '../Preloader';
 
 import {
   selectTopSales,
@@ -17,23 +17,10 @@ function TopSales() {
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
 
-  console.log(error);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchTopSales());
   }, [dispatch]);
-
-  const preloader = (
-    <>
-      <div className="preloader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </>
-  );
 
   const loaded = (
     <>
@@ -77,7 +64,7 @@ function TopSales() {
     return (
       <section className="top-sales">
         <h2 className="text-center">Хиты продаж!</h2>
-        {loading ? preloader : error.status ? errorHappened : loaded}
+        {loading ? <Preloader /> : error.status ? errorHappened : loaded}
       </section>
     );
   }
