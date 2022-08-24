@@ -27,16 +27,21 @@ export const fetchCategories = createAsyncThunk(
 
 export const fetchCatalog = createAsyncThunk(
   'catalog/fetchCatalog',
-  async (id, { rejectWithValue }) => {
+  async ({ id, query = null }, { rejectWithValue }) => {
     try {
       let response;
       if (id === 11) {
-        response = await axios.get(process.env.REACT_APP_SHOP_CATALOG);
+        response = await axios.get(
+          `${process.env.REACT_APP_SHOP_CATALOG}${query ? `?q=${query}` : ''}`
+        );
       } else {
         response = await axios.get(
-          `${process.env.REACT_APP_SHOP_CATALOG_CATEGORY}=${id}`
+          `${process.env.REACT_APP_SHOP_CATALOG_CATEGORY}=${id}${
+            query ? `&q=${query}` : ''
+          }`
         );
       }
+
       return response.data;
     } catch (error) {
       return rejectWithValue('Каталог не загрузился');
@@ -46,16 +51,22 @@ export const fetchCatalog = createAsyncThunk(
 
 export const fetchMoreItems = createAsyncThunk(
   'catalog/fetchMoreItems',
-  async ({ id, offset }, { rejectWithValue }) => {
+  async ({ id, offset, query = null }, { rejectWithValue }) => {
     try {
       let response;
       if (id === 11) {
         response = await axios.get(
-          `${process.env.REACT_APP_SHOP_CATALOG}?offset=${offset}`
+          `${process.env.REACT_APP_SHOP_CATALOG}${
+            query ? `?q=${query}&offset=${offset}` : `?offset=${offset}`
+          }`
         );
       } else {
         response = await axios.get(
-          `${process.env.REACT_APP_SHOP_CATALOG_CATEGORY}=${id}?offset=${offset}`
+          `${process.env.REACT_APP_SHOP_CATALOG}${
+            query
+              ? `?q=${query}&categoryId=${id}&offset=${offset}`
+              : `?categoryId=${id}&offset=${offset}`
+          }`
         );
       }
       return response.data;

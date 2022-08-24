@@ -1,13 +1,15 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-// import { categoriesSlice } from '../slices/сategoriesSlice';
+
 import topSalesSlice from '../slices/topSalesSlice';
 import categoriesSlice from '../slices/categoriesSlice';
 import catalogSlice from '../slices/catalogSlice';
+import searchSlice from '../slices/searchSlice';
 
 const reducer = combineReducers({
   topSales: topSalesSlice,
   categories: categoriesSlice,
   catalog: catalogSlice,
+  search: searchSlice,
 });
 
 export const store = configureStore({

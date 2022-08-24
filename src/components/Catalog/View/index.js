@@ -15,6 +15,7 @@ import {
   selectActiveCategory,
   selectLoading as selectLoadingCategories,
 } from '../../../slices/categoriesSlice';
+import { selectSearch } from '../../../slices/searchSlice';
 import Preloader from '../../Preloader';
 
 function CatalogView() {
@@ -30,12 +31,15 @@ function CatalogView() {
   const activeCategoryId = useSelector(selectActiveCategory);
   const loadingCategories = useSelector(selectLoadingCategories);
 
+  const search = useSelector(selectSearch);
+
   useEffect(() => {
-    dispatch(fetchCatalog(activeCategoryId));
+    dispatch(fetchCatalog({ id: activeCategoryId, query: search }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, activeCategoryId]);
 
   const handleReload = () => {
-    dispatch(fetchCatalog(activeCategoryId));
+    dispatch(fetchCatalog({ id: activeCategoryId }));
   };
 
   const loaded = (
@@ -73,7 +77,13 @@ function CatalogView() {
   );
 
   const handleClick = () => {
-    dispatch(fetchMoreItems({ id: activeCategoryId, offset: catalog.length }));
+    dispatch(
+      fetchMoreItems({
+        id: activeCategoryId,
+        offset: catalog.length,
+        query: search,
+      })
+    );
   };
 
   const fetchMore = (
@@ -91,6 +101,8 @@ function CatalogView() {
       <div className="text-center">Вы загрузили все доступные товары</div>
     </>
   );
+
+  if (loadingCategories) return null;
 
   return (
     <div>
