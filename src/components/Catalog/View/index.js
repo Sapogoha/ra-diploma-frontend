@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import { Link, useLocation } from 'react-router-dom';
 import { fetchCatalog, fetchMoreItems } from '../../../thunks/asyncThunks';
 import {
   selectCatalog,
@@ -15,12 +14,13 @@ import {
   selectActiveCategory,
   selectLoading as selectLoadingCategories,
 } from '../../../slices/categoriesSlice';
-import { selectSearch } from '../../../slices/searchSlice';
+import { selectSearch, resetSearch } from '../../../slices/searchSlice';
 import Preloader from '../../Preloader';
+import links from '../../../common/links';
 
 function CatalogView() {
   const dispatch = useDispatch();
-
+  const { pathname } = useLocation();
   const catalog = useSelector(selectCatalog);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
@@ -34,6 +34,9 @@ function CatalogView() {
   const search = useSelector(selectSearch);
 
   useEffect(() => {
+    if (pathname !== links.catalog) {
+      dispatch(resetSearch());
+    }
     dispatch(fetchCatalog({ id: activeCategoryId, query: search }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, activeCategoryId]);

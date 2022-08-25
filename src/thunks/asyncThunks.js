@@ -75,3 +75,18 @@ export const fetchMoreItems = createAsyncThunk(
     }
   }
 );
+
+export const fetchProductItem = createAsyncThunk(
+  'catalog/fetchProductItem',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SHOP_CATALOG}/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Данные о товаре не загрузились');
+    }
+  }
+);

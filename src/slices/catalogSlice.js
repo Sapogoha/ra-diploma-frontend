@@ -9,6 +9,7 @@ const initialState = {
   error: { status: null, message: null },
   showFetchMoreButton: false,
   endOfList: false,
+  search: '',
 };
 
 export const catalogSlice = createSlice({
