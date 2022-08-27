@@ -6,7 +6,7 @@ const initialState = {
   product: null,
   loading: false,
   error: { status: null, message: null },
-  quantity: 0,
+  quantity: 1,
   size: null,
 };
 
@@ -18,7 +18,7 @@ export const productItemSlice = createSlice({
       state.quantity < 10 ? (state.quantity += 1) : (state.quantity = 10);
     },
     decrement: (state) => {
-      state.quantity > 0 ? (state.quantity -= 1) : (state.quantity = 0);
+      state.quantity > 1 ? (state.quantity -= 1) : (state.quantity = 1);
     },
     toggleSize: (state, action) => {
       state.size === action.payload
@@ -26,7 +26,7 @@ export const productItemSlice = createSlice({
         : (state.size = action.payload);
     },
     removeQuantity: (state) => {
-      state.quantity = 0;
+      state.quantity = 1;
     },
   },
   extraReducers: {

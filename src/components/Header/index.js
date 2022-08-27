@@ -2,19 +2,19 @@ import React, { useState, useRef } from 'react';
 import headerLogo from '../../img/header-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
 import {
   changeSearchTop,
   selectSearchTop,
   resetSearchTop,
 } from '../../slices/searchSlice';
-
+import { selectNumberOfItems } from '../../slices/cartSlice';
 import links from '../../common/links';
 
 function Header() {
   const [searchVisible, setVisible] = useState(false);
   const textInput = useRef(null);
   const search = useSelector(selectSearchTop);
+  const numberOfItems = useSelector(selectNumberOfItems);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -66,6 +66,10 @@ function Header() {
     </>
   );
 
+  const cartIndicator = (
+    <div className="header-controls-cart-full">{numberOfItems}</div>
+  );
+
   return (
     <header className="container">
       <div className="row bg-light">
@@ -86,7 +90,8 @@ function Header() {
                   ></div>
                   <Link to={links.cart}>
                     <div className="header-controls-pic header-controls-cart">
-                      <div className="header-controls-cart-full">1</div>
+                      {numberOfItems ? cartIndicator : null}
+
                       <div className="header-controls-cart-menu"></div>
                     </div>
                   </Link>

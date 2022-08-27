@@ -53,7 +53,9 @@ function ProductItem() {
     dispatch(
       addToCart({
         id: product.id,
+        title: product.title,
         size: selectedSize,
+        price: product.price,
         quantity,
       })
     );
@@ -87,7 +89,7 @@ function ProductItem() {
 
   const addToCartInactive = (
     <button className="btn btn-secondary btn-block btn-lg">
-      Сначала выберите размер и количество
+      Сначала выберите размер
     </button>
   );
 
