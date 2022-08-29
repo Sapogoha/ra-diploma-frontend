@@ -28,11 +28,14 @@ function TopSales() {
         {topSales?.map((item) => (
           <div className="col-4" key={item.id}>
             <div className="card">
-              <img
-                src={item.images[0]}
-                className="card-img-top img-fluid"
-                alt={item.title}
-              />
+              <div className="card-img-container">
+                <img
+                  src={item.images[0]}
+                  className="card-img-top img-fluid"
+                  alt={item.title}
+                />
+              </div>
+
               <div className="card-body">
                 <p className="card-text">{item.title}</p>
                 <p className="card-text">{item.price} руб.</p>
@@ -53,7 +56,9 @@ function TopSales() {
 
   const errorHappened = (
     <>
-      <div className="mb-3">{error.message}</div>
+      <div className="alert alert-warning text-center" role="alert">
+        {error.message}
+      </div>
       <button className="btn btn-outline-primary" onClick={reloadHandler}>
         Загрузить хиты продаж
       </button>

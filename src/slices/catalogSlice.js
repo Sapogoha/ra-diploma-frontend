@@ -9,7 +9,6 @@ const initialState = {
   error: { status: null, message: null },
   showFetchMoreButton: false,
   endOfList: false,
-  search: '',
 };
 
 export const catalogSlice = createSlice({
@@ -30,8 +29,10 @@ export const catalogSlice = createSlice({
         state.showFetchMoreButton = true;
         state.endOfList = false;
       } else {
+        // state.showFetchMoreButton = false;
         state.endOfList = true;
       }
+      // console.log(action.payload);
       state.catalog = action.payload;
     },
     [fetchCatalog.rejected]: (state, action) => {
@@ -63,6 +64,7 @@ export const catalogSlice = createSlice({
     },
     [fetchMoreItems.rejected]: (state, action) => {
       state.loadingNewItems = false;
+      console.log(state.catalog);
       state.error.status = true;
       state.error.message = action.payload;
       state.showFetchMoreButton = false;

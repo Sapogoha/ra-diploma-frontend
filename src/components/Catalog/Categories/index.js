@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-
 import { fetchCategories } from '../../../thunks/asyncThunks';
 import {
   selectCategories,
@@ -34,7 +33,9 @@ function CatalogCategories() {
 
   const errorHappened = (
     <>
-      <div className="mb-3">{error.message}</div>
+      <div className="alert alert-warning text-center" role="alert">
+        {error.message}
+      </div>
       <button className="btn btn-outline-primary" onClick={handleReload}>
         Загрузить категории
       </button>

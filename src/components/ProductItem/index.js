@@ -167,7 +167,9 @@ function ProductItem() {
 
   const errorHappened = (
     <>
-      <div className="mb-3">{error.message}</div>
+      <div className="alert alert-warning text-center" role="alert">
+        {error.message}
+      </div>
       <button className="btn btn-outline-primary" onClick={handleReload}>
         Загрузить данные о товаре
       </button>
