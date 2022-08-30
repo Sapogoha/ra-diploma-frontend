@@ -93,6 +93,7 @@ function CatalogView() {
     <>
       <div className="alert alert-warning text-center" role="alert">
         {error.message}
+        <div>Нажмите на кнопку ниже, а затем повторите поиск</div>
       </div>
       <button className="btn btn-outline-primary" onClick={handleReload}>
         Загрузить товары
@@ -122,7 +123,7 @@ function CatalogView() {
 
   const listEnd = (
     <div className="alert alert-warning text-center" role="alert">
-      Вы загрузили все доступные товары
+      Вы загрузили все доступные товары ({catalog.length} шт.)
     </div>
   );
 
@@ -143,15 +144,16 @@ function CatalogView() {
       ) : (
         loaded
       )}
-
       {loadingNewItems && <Preloader />}
       {showFetchMoreButton
         ? fetchMore
         : !endOfList
         ? null
-        : search
-        ? noItemsFound
-        : listEnd}
+        : !search
+        ? listEnd
+        : catalog.length > 0
+        ? listEnd
+        : noItemsFound}
     </>
   );
 }

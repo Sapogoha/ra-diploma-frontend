@@ -71,7 +71,7 @@ export const fetchMoreItems = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
-      return rejectWithValue('Товары закончились или произошла ошибка>');
+      return rejectWithValue('Произошла ошибка загрузки');
     }
   }
 );
