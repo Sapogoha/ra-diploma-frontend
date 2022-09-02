@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -6,21 +6,75 @@ import {
   selectSum,
   removeFromCart,
   selectNumberOfItems,
+  updateProduct,
+  selectNewPrice,
+  selectLoading,
 } from '../../../slices/cartSlice';
+import { refreshPrice } from '../../../thunks/asyncThunks';
+import Preloader from '../../Preloader';
 
 function ShoppingList() {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
   const sum = useSelector(selectSum);
   const numberOfItems = useSelector(selectNumberOfItems);
+  const newPrice = useSelector(selectNewPrice);
+  const loading = useSelector(selectLoading);
 
-  const handleClick = (id) => {
+  const ids = useMemo(
+    () =>
+      cart.map((item) => ({ id: item.id, price: item.price, size: item.size })),
+    [cart]
+  );
+
+  const handleClickDelete = (id) => {
     dispatch(removeFromCart(id));
   };
+
+  const handleClickUpdate = (id) => {
+    const toUpdate = ids.find((item) => item.id === id);
+    console.log(toUpdate);
+    dispatch(updateProduct({ id, size: toUpdate.size, price: newPrice.price }));
+  };
+
+  useEffect(() => {
+    ids.map((item) =>
+      dispatch(
+        refreshPrice({ id: item.id, oldPrice: item.price, size: item.size })
+      )
+    );
+  }, [dispatch, ids]);
+
+  const priceChanged = (
+    <>
+      <div className="alert alert-danger text-center" role="alert">
+        <div>
+          Изменилась цена товара "
+          <Link to={`/catalog/${newPrice?.id}.html`}>{newPrice?.title}</Link>",
+          новая цена - {newPrice?.price}
+        </div>
+        <div className="m-2" role="group">
+          <button
+            onClick={() => handleClickUpdate(newPrice?.id)}
+            className="btn btn-outline-success btn me-3"
+          >
+            Пересчитать стоимость
+          </button>
+          <button
+            onClick={() => handleClickDelete(newPrice?.id)}
+            className="btn btn-outline-danger btn"
+          >
+            Удалить товар из корзины
+          </button>
+        </div>
+      </div>
+    </>
+  );
 
   const section = (
     <section className="cart">
       <h2 className="text-center">Корзина</h2>
+      {loading ? <Preloader /> : newPrice && priceChanged}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -48,7 +102,7 @@ function ShoppingList() {
               <td>{item.price * item.quantity}</td>
               <td>
                 <button
-                  onClick={() => handleClick(item.id)}
+                  onClick={() => handleClickDelete(item.id)}
                   className="btn btn-outline-danger btn-sm"
                 >
                   Удалить

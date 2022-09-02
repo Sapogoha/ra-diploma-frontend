@@ -90,3 +90,25 @@ export const fetchProductItem = createAsyncThunk(
     }
   }
 );
+
+export const refreshPrice = createAsyncThunk(
+  'catalog/refreshPrice',
+  async ({ id, oldPrice, size }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SHOP_CATALOG}/${id}`
+      );
+
+      return oldPrice === response.data.price
+        ? 'same price'
+        : {
+            id: response.data.id,
+            title: response.data.title,
+            price: response.data.price,
+            size,
+          };
+    } catch (error) {
+      return rejectWithValue('Данные о товаре не загрузились');
+    }
+  }
+);

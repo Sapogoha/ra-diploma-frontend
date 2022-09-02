@@ -4,6 +4,7 @@ import {
   emptyCart,
   selectCart,
   selectNumberOfItems,
+  selectNewPrice,
 } from '../../../slices/cartSlice';
 import axios from 'axios';
 import Preloader from '../../Preloader';
@@ -17,6 +18,7 @@ function OrderForm() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(EMPTY_STATE_ERROR);
+  const newPrice = useSelector(selectNewPrice);
 
   const cart = useSelector(selectCart);
 
@@ -57,6 +59,19 @@ function OrderForm() {
       });
     }
   };
+
+  const sendBtnActive = (
+    <button type="submit" className="btn btn-outline-secondary">
+      Оформить
+    </button>
+  );
+
+  const sendBtnPlaceholder = (
+    <div className="alert alert-danger text-center" role="alert">
+      Pазрешите пересчитать стоимость корзины или удалите товар с изменившейся
+      ценой. После этого вы сможете оформить заказ
+    </div>
+  );
 
   const section = (
     <div className="card" style={{ maxWidth: '30rem', margin: '0 auto' }}>
@@ -99,9 +114,7 @@ function OrderForm() {
             Согласен с правилами доставки
           </label>
         </div>
-        <button type="submit" className="btn btn-outline-secondary">
-          Оформить
-        </button>
+        {newPrice ? sendBtnPlaceholder : sendBtnActive}
       </form>
     </div>
   );
