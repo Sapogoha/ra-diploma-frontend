@@ -10,11 +10,18 @@ function CatalogSearch() {
   const activeCategoryId = useSelector(selectActiveCategory);
 
   const handleChange = (event) => {
+    if (search.trim === '') {
+      return;
+    }
     dispatch(changeSearch(event.target.value));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (search.trim() === '') {
+      return;
+    }
+
     dispatch(fetchCatalog({ id: activeCategoryId, query: search }));
   };
 

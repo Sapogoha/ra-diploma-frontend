@@ -5,7 +5,6 @@ import { refreshPrice } from '../thunks/asyncThunks';
 const savedCart = localStorage.getItem('cart');
 const empty = {
   cart: [],
-  sum: 0,
   newPrice: null,
   loading: false,
   error: { status: null, message: null },
@@ -24,27 +23,22 @@ export const cartSlice = createSlice({
 
       if (index >= 0) {
         state.cart[index].quantity += action.payload.quantity;
-        state.sum += action.payload.price * action.payload.quantity;
       } else {
         state.cart = [...state.cart, action.payload];
-        state.sum += action.payload.price * action.payload.quantity;
       }
-      localStorage.setItem('cart', JSON.stringify(state));
+      // localStorage.setItem('cart', JSON.stringify(state));
     },
     removeFromCart(state, action) {
-      const toDelete = state.cart.find((item) => item.id === action.payload);
-      state.sum -= toDelete.quantity * toDelete.price;
       state.cart = state.cart.filter((item) => item.id !== action.payload);
-      state.cart.length > 0
-        ? localStorage.setItem('cart', JSON.stringify(state))
-        : localStorage.removeItem('cart', JSON.stringify(state));
+      // state.cart.length > 0
+      //   ? localStorage.setItem('cart', JSON.stringify(state))
+      //   : localStorage.removeItem('cart', JSON.stringify(state));
       state.newPrice = null;
     },
 
-    emptyCart(state) {
+    clearCart(state) {
       state.cart = [];
-      state.sum = 0;
-      localStorage.removeItem('cart', JSON.stringify(state));
+      // localStorage.removeItem('cart', JSON.stringify(state));
       state.newPrice = null;
     },
     updateProduct(state, action) {
@@ -53,16 +47,12 @@ export const cartSlice = createSlice({
         (item) =>
           item.id === action.payload.id && item.size === action.payload.size
       );
-      console.log(index);
+      // console.log(index);
 
       if (index >= 0) {
-        state.sum =
-          state.sum -
-          state.cart[index].price * state.cart[index].quantity +
-          action.payload.price * state.cart[index].quantity;
         state.cart[index].price = action.payload.price;
         state.newPrice = null;
-        localStorage.setItem('cart', JSON.stringify(state));
+        // localStorage.setItem('cart', JSON.stringify(state));
       }
     },
   },
@@ -88,12 +78,11 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, emptyCart, updateProduct } =
+export const { addToCart, removeFromCart, clearCart, updateProduct } =
   cartSlice.actions;
 
 export const selectCart = (state) => state.cart.cart;
 export const selectNumberOfItems = (state) => state.cart.cart.length;
-export const selectSum = (state) => state.cart.sum;
 export const selectNewPrice = (state) => state.cart.newPrice;
 export const selectLoading = (state) => state.categories.loading;
 export const selectError = (state) => state.categories.error;

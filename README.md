@@ -1,29 +1,31 @@
-# Getting Started with Create React App and Redux
+# Дипломный проект курса «React»
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+Дипломный проект представляет собой [интернет-магазин обуви](https://sapogoha.github.io/
+ra-diploma-frontend/).
 
 ## Backend
 
 [Github](https://github.com/Sapogoha/ra-diploma-backend.git)
+[Heroku](https://sapogoha-ra-diploma-back.herokuapp.com)
 
-## Available Scripts
+Для демонстрации возможностей приложения заложена эмуляция задержки ответа и генерация ошибок.
 
-In the project directory, you can run:
+## Используемые технологии
 
-### `npm start`
+- React
+- React Router
+- Redux
+- Redux Toolkit
+- Redux Persist
+- Node.js (Backend Emulation)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Содержание
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Приложение содержит следующие самостоятельные экраны (страницы):
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Главная страница
+1. Каталог товаров
+1. Информационная страница
+1. Страница товара
+1. Корзина
+1. 404

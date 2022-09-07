@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  emptyCart,
+  clearCart,
   selectCart,
   selectNumberOfItems,
   selectNewPrice,
@@ -44,19 +44,19 @@ function OrderForm() {
       );
 
       if (response.status === 204) {
-        setLoading(false);
         setError(EMPTY_STATE_ERROR);
         setForm(EMPTY_STATE);
         setSent(true);
-        dispatch(emptyCart());
+        dispatch(clearCart());
       }
     } catch (err) {
-      setLoading(false);
       setSent(false);
       setError({
         status: true,
         message: 'Что-то пошло не так. Попробуйте еще раз',
       });
+    } finally {
+      setLoading(false);
     }
   };
 

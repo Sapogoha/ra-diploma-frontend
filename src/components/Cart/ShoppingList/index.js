@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   selectCart,
-  selectSum,
   removeFromCart,
   selectNumberOfItems,
   updateProduct,
@@ -16,10 +15,13 @@ import Preloader from '../../Preloader';
 function ShoppingList() {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
-  const sum = useSelector(selectSum);
   const numberOfItems = useSelector(selectNumberOfItems);
   const newPrice = useSelector(selectNewPrice);
   const loading = useSelector(selectLoading);
+
+  const sum = cart.reduce((curNumber, item) => {
+    return curNumber + item.price * item.quantity;
+  }, 0);
 
   const ids = useMemo(
     () =>

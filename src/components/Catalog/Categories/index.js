@@ -10,6 +10,7 @@ import {
   chooseActiveCategory,
 } from '../../../slices/categoriesSlice';
 import Preloader from '../../Preloader';
+import ErrorHappened from '../../UI/ErrorHappened';
 
 function CatalogCategories() {
   const dispatch = useDispatch();
@@ -32,14 +33,9 @@ function CatalogCategories() {
   };
 
   const errorHappened = (
-    <>
-      <div className="alert alert-warning text-center" role="alert">
-        {error.message}
-      </div>
-      <button className="btn btn-outline-primary" onClick={handleReload}>
-        Загрузить категории
-      </button>
-    </>
+    <ErrorHappened message={error.message} onClick={handleReload}>
+      Загрузить категории
+    </ErrorHappened>
   );
 
   const loaded = (
