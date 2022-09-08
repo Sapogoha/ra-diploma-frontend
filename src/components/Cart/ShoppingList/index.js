@@ -35,7 +35,6 @@ function ShoppingList() {
 
   const handleClickUpdate = (id) => {
     const toUpdate = ids.find((item) => item.id === id);
-    console.log(toUpdate);
     dispatch(updateProduct({ id, size: toUpdate.size, price: newPrice.price }));
   };
 

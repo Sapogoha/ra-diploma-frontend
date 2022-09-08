@@ -333,3 +333,27 @@ h2,
   background-color: #727e86;
   border-color: #727e86;
 }
+
+button:disabled,
+button:disabled:hover,
+button:disabled:active {
+  background-color: rgb(231, 231, 231);
+  color: #292929;
+  border-color: rgb(231, 231, 231);
+  cursor: not-allowed;
+}
+
+.form-control.invalid,
+.form-check-input.invalid {
+  border: 1px solid #b40e0e;
+  background-color: #ebb8b8;
+}
+
+.form-control.invalid:focus {
+  border-color: #ff8800;
+  background-color: #fbe8d2;
+}
+
+.error-text {
+  color: #b40e0e;
+}
