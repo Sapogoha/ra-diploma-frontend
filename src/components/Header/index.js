@@ -6,8 +6,8 @@ import {
   changeSearchTop,
   selectSearchTop,
   resetSearchTop,
-} from '../../slices/searchSlice';
-import { selectNumberOfItems } from '../../slices/cartSlice';
+} from '../../store/slices/searchSlice';
+import { selectNumberOfItems } from '../../store/slices/cartSlice';
 import links from '../../common/links';
 
 function Header() {

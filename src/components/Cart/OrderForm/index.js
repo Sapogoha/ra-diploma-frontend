@@ -5,8 +5,7 @@ import {
   selectCart,
   selectNumberOfItems,
   selectNewPrice,
-} from '../../../slices/cartSlice';
-import axios from 'axios';
+} from '../../../store/slices/cartSlice';
 import Preloader from '../../Preloader';
 
 function OrderForm() {
@@ -38,12 +37,16 @@ function OrderForm() {
     try {
       setError(EMPTY_STATE_ERROR);
       setLoading(true);
-      const response = await axios.post(
-        process.env.REACT_APP_SHOP_CART_POST_ORDER,
-        { owner: form, items }
-      );
 
-      if (response.status === 204) {
+      const response = await fetch(process.env.REACT_APP_SHOP_CART_POST_ORDER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ owner: form, items }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Что-то пошло не так. Попробуйте еще раз');
+      } else {
         setError(EMPTY_STATE_ERROR);
         setForm(EMPTY_STATE);
         setSent(true);
@@ -53,7 +56,7 @@ function OrderForm() {
       setSent(false);
       setError({
         status: true,
-        message: 'Что-то пошло не так. Попробуйте еще раз',
+        message: err.message,
       });
     } finally {
       setLoading(false);
@@ -120,12 +123,13 @@ function OrderForm() {
   );
 
   const sendingError = (
-    <>
-      <div className="alert alert-danger text-center" role="alert">
-        {error.message}
-      </div>
-      {section}
-    </>
+    <div
+      className="alert alert-danger text-center"
+      role="alert"
+      style={{ marginTop: '20px' }}
+    >
+      {error.message}
+    </div>
   );
 
   const sentSuccessfully = (
@@ -150,7 +154,7 @@ function OrderForm() {
         {!numberOfItems && noItems}
         {numberOfItems > 0 && section}
         {numberOfItems > 0 && loading && <Preloader />}
-        {error.status && sendingError}
+        {numberOfItems > 0 && error.status && sendingError}
         {sent && sentSuccessfully}
       </section>
     </>

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
-import { fetchCatalog, fetchMoreItems } from '../../../thunks/asyncThunks';
+import {
+  fetchCatalog,
+  fetchMoreItems,
+} from '../../../store/thunks/asyncThunks';
 import {
   selectCatalog,
   selectLoading,
@@ -10,13 +13,13 @@ import {
   selectLoadingNewItems,
   selectShowFetchMoreButton,
   selectEndOfList,
-} from '../../../slices/catalogSlice';
+} from '../../../store/slices/catalogSlice';
 import {
   selectActiveCategory,
   selectLoading as selectLoadingCategories,
   selectError as selectCategoriesError,
-} from '../../../slices/categoriesSlice';
-import { selectSearch, resetSearch } from '../../../slices/searchSlice';
+} from '../../../store/slices/categoriesSlice';
+import { selectSearch, resetSearch } from '../../../store/slices/searchSlice';
 
 import ErrorHappened from '../../UI/ErrorHappened';
 import Preloader from '../../Preloader';

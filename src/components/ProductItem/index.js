@@ -1,52 +1,67 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchProductItem } from '../../thunks/asyncThunks';
+import { useDispatch } from 'react-redux';
+
 import Preloader from '../Preloader';
-import {
-  selectProduct,
-  selectLoading,
-  selectError,
-  selectQuantity,
-  selectSize,
-  increment,
-  decrement,
-  toggleSize,
-  removeQuantity,
-} from '../../slices/productItemSlice';
-import { addToCart } from '../../slices/cartSlice';
+import { addToCart } from '../../store/slices/cartSlice';
+
 import links from '../../common/links';
 
 function ProductItem() {
-  const product = useSelector(selectProduct);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const quantity = useSelector(selectQuantity);
-  const selectedSize = useSelector(selectSize);
   const { id } = useParams();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ status: null, message: null });
+
+  const fetchProductHandler = useCallback(async (id) => {
+    setLoading(true);
+    setError({ status: null, message: null });
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SHOP_CATALOG}/${id}`
+      );
+      if (!response.ok) {
+        throw new Error(
+          'Что-то пошло не так. Возможно такого товара не существует'
+        );
+      }
+      const data = await response.json();
+      setProduct(data);
+    } catch (error) {
+      setError({ status: true, message: error.message });
+    }
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
-    dispatch(fetchProductItem(Number(id)));
-  }, [dispatch, id]);
+    fetchProductHandler(Number(id));
+  }, [fetchProductHandler, id]);
 
   const availableSizes = product?.sizes?.filter((size) => size.avalible);
 
   const handleReload = () => {
-    dispatch(fetchProductItem(Number(id)));
+    fetchProductHandler(Number(id));
   };
 
   const handleIncrement = () => {
-    dispatch(increment());
+    if (quantity < 10) {
+      setQuantity(quantity + 1);
+    }
   };
 
   const handleDecrement = () => {
-    dispatch(decrement());
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
   const handleClick = (size) => {
-    dispatch(toggleSize(size));
+    selectedSize === null ? setSelectedSize(size) : setSelectedSize(null);
   };
 
   const addToCartHandler = () => {
@@ -59,8 +74,6 @@ function ProductItem() {
         quantity,
       })
     );
-    dispatch(toggleSize(selectedSize));
-    dispatch(removeQuantity());
     navigate(links.cart);
   };
 

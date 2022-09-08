@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { fetchCategories } from '../../../thunks/asyncThunks';
+import { fetchCategories } from '../../../store/thunks/asyncThunks';
 import {
   selectCategories,
   selectActiveCategory,
   selectLoading,
   selectError,
   chooseActiveCategory,
-} from '../../../slices/categoriesSlice';
+} from '../../../store/slices/categoriesSlice';
 import Preloader from '../../Preloader';
 import ErrorHappened from '../../UI/ErrorHappened';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeSearch, selectSearch } from '../../../slices/searchSlice';
-import { fetchCatalog } from '../../../thunks/asyncThunks';
-import { selectActiveCategory } from '../../../slices/categoriesSlice';
+import { changeSearch, selectSearch } from '../../../store/slices/searchSlice';
+import { fetchCatalog } from '../../../store/thunks/asyncThunks';
+import { selectActiveCategory } from '../../../store/slices/categoriesSlice';
 
 function CatalogSearch() {
   const dispatch = useDispatch();

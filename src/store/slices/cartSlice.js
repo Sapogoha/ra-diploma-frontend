@@ -2,20 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { refreshPrice } from '../thunks/asyncThunks';
 
-const savedCart = localStorage.getItem('cart');
-const empty = {
+const initialState = {
   cart: [],
   newPrice: null,
   loading: false,
   error: { status: null, message: null },
 };
-const initialState = savedCart ? JSON.parse(savedCart) : empty;
 
 export const cartSlice = createSlice({
   name: 'cartSlice',
   initialState,
   reducers: {
     addToCart(state, action) {
+      console.log(initialState);
       const index = state.cart.findIndex(
         (item) =>
           item.id === action.payload.id && item.size === action.payload.size
@@ -26,33 +25,25 @@ export const cartSlice = createSlice({
       } else {
         state.cart = [...state.cart, action.payload];
       }
-      // localStorage.setItem('cart', JSON.stringify(state));
     },
     removeFromCart(state, action) {
       state.cart = state.cart.filter((item) => item.id !== action.payload);
-      // state.cart.length > 0
-      //   ? localStorage.setItem('cart', JSON.stringify(state))
-      //   : localStorage.removeItem('cart', JSON.stringify(state));
       state.newPrice = null;
     },
 
     clearCart(state) {
       state.cart = [];
-      // localStorage.removeItem('cart', JSON.stringify(state));
       state.newPrice = null;
     },
     updateProduct(state, action) {
-      console.log(action.payload);
       const index = state.cart.findIndex(
         (item) =>
           item.id === action.payload.id && item.size === action.payload.size
       );
-      // console.log(index);
 
       if (index >= 0) {
         state.cart[index].price = action.payload.price;
         state.newPrice = null;
-        // localStorage.setItem('cart', JSON.stringify(state));
       }
     },
   },

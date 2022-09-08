@@ -11,12 +11,12 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import topSalesSlice from '../slices/topSalesSlice';
-import categoriesSlice from '../slices/categoriesSlice';
-import catalogSlice from '../slices/catalogSlice';
-import searchSlice from '../slices/searchSlice';
-import productItemSlice from '../slices/productItemSlice';
-import cartSlice from '../slices/cartSlice';
+import topSalesSlice from './slices/topSalesSlice';
+import categoriesSlice from './slices/categoriesSlice';
+import catalogSlice from './slices/catalogSlice';
+import searchSlice from './slices/searchSlice';
+
+import cartSlice from './slices/cartSlice';
 
 const persistConfig = {
   key: 'cart',
@@ -36,7 +36,6 @@ const reducer = combineReducers({
   categories: categoriesSlice,
   catalog: catalogSlice,
   search: searchSlice,
-  product: productItemSlice,
   cart: persistReducer(cartPersistConfig, cartSlice),
 });
 

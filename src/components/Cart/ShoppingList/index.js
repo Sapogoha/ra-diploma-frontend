@@ -8,8 +8,8 @@ import {
   updateProduct,
   selectNewPrice,
   selectLoading,
-} from '../../../slices/cartSlice';
-import { refreshPrice } from '../../../thunks/asyncThunks';
+} from '../../../store/slices/cartSlice';
+import { refreshPrice } from '../../../store/thunks/asyncThunks';
 import Preloader from '../../Preloader';
 
 function ShoppingList() {
