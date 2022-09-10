@@ -3,14 +3,14 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fetchTopSales } from '../../thunks/asyncThunks';
+import { fetchTopSales } from '../../store/thunks/asyncThunks';
 import Preloader from '../Preloader';
 
 import {
   selectTopSales,
   selectLoading,
   selectError,
-} from '../../slices/topSalesSlice';
+} from '../../store/slices/topSalesSlice';
 
 function TopSales() {
   const topSales = useSelector(selectTopSales);

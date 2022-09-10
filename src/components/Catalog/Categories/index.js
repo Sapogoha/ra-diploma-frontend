@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { fetchCategories } from '../../../thunks/asyncThunks';
+import { fetchCategories } from '../../../store/thunks/asyncThunks';
 import {
   selectCategories,
   selectActiveCategory,
   selectLoading,
   selectError,
   chooseActiveCategory,
-} from '../../../slices/categoriesSlice';
+} from '../../../store/slices/categoriesSlice';
 import Preloader from '../../Preloader';
+import ErrorHappened from '../../UI/ErrorHappened';
 
 function CatalogCategories() {
   const dispatch = useDispatch();
@@ -32,14 +33,9 @@ function CatalogCategories() {
   };
 
   const errorHappened = (
-    <>
-      <div className="alert alert-warning text-center" role="alert">
-        {error.message}
-      </div>
-      <button className="btn btn-outline-primary" onClick={handleReload}>
-        Загрузить категории
-      </button>
-    </>
+    <ErrorHappened message={error.message} onClick={handleReload}>
+      Загрузить категории
+    </ErrorHappened>
   );
 
   const loaded = (

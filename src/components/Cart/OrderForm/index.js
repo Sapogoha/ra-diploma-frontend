@@ -1,26 +1,51 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import {
-  emptyCart,
+  clearCart,
   selectCart,
   selectNumberOfItems,
   selectNewPrice,
-} from '../../../slices/cartSlice';
-import axios from 'axios';
+} from '../../../store/slices/cartSlice';
+import useInput from '../../../hooks/useInput';
+
 import Preloader from '../../Preloader';
+
+const regex = new RegExp(/^[\d+][\d() -]{4,14}\d$/);
+const EMPTY_STATE_ERROR = { status: null, message: null };
+
+const isNotEmpty = (value) => value.trim().length >= 5;
+const isPhone = (value) => regex.test(value);
 
 function OrderForm() {
   const dispatch = useDispatch();
   const numberOfItems = useSelector(selectNumberOfItems);
-  const EMPTY_STATE = { phone: '', address: '' };
-  const EMPTY_STATE_ERROR = { status: null, message: null };
-  const [form, setForm] = useState(EMPTY_STATE);
+  const newPrice = useSelector(selectNewPrice);
+  const cart = useSelector(selectCart);
+
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(EMPTY_STATE_ERROR);
-  const newPrice = useSelector(selectNewPrice);
+  const [checkboxClicked, setCheckboxClicked] = useState(false);
+  let formIsValid = false;
 
-  const cart = useSelector(selectCart);
+  const {
+    value: phoneValue,
+    isValid: phoneIsValid,
+    hasError: phoneHasError,
+    valueChangeHandler: phoneChangeHandler,
+    inputBlurHandler: phoneBlurHandler,
+    reset: resetPhone,
+  } = useInput(isPhone);
+
+  const {
+    value: addressValue,
+    isValid: addressIsValid,
+    hasError: addressHasError,
+    valueChangeHandler: addressChangeHandler,
+    inputBlurHandler: addressBlurHandler,
+    reset: resetAddress,
+  } = useInput(isNotEmpty);
 
   const items = cart.map((item) => ({
     id: item.id,
@@ -28,40 +53,58 @@ function OrderForm() {
     count: item.quantity,
   }));
 
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+  const handleCheckboxCkick = () => {
+    setCheckboxClicked((prevState) => !prevState);
   };
+
+  if (phoneIsValid && addressIsValid && checkboxClicked) {
+    formIsValid = true;
+  }
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    if (!formIsValid) {
+      return;
+    }
     try {
       setError(EMPTY_STATE_ERROR);
       setLoading(true);
-      const response = await axios.post(
-        process.env.REACT_APP_SHOP_CART_POST_ORDER,
-        { owner: form, items }
-      );
 
-      if (response.status === 204) {
-        setLoading(false);
+      const response = await fetch(process.env.REACT_APP_SHOP_CART_POST_ORDER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          owner: { phone: phoneValue, address: addressValue },
+          items,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Что-то пошло не так. Попробуйте еще раз');
+      } else {
         setError(EMPTY_STATE_ERROR);
-        setForm(EMPTY_STATE);
         setSent(true);
-        dispatch(emptyCart());
+        resetPhone();
+        resetAddress();
+        dispatch(clearCart());
       }
     } catch (err) {
-      setLoading(false);
       setSent(false);
       setError({
         status: true,
-        message: 'Что-то пошло не так. Попробуйте еще раз',
+        message: err.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const sendBtnActive = (
-    <button type="submit" className="btn btn-outline-secondary">
+    <button
+      type="submit"
+      className="btn btn-outline-secondary"
+      disabled={!formIsValid}
+    >
       Оформить
     </button>
   );
@@ -73,6 +116,16 @@ function OrderForm() {
     </div>
   );
 
+  const phoneClasses = phoneHasError
+    ? 'form-control mt-2 invalid'
+    : 'form-control mt-2';
+  const addressClasses = addressHasError
+    ? 'form-control mt-2 invalid'
+    : 'form-control mt-2';
+  const checkboxClasses = !checkboxClicked
+    ? 'form-check-input invalid'
+    : 'form-check-input';
+
   const section = (
     <div className="card" style={{ maxWidth: '30rem', margin: '0 auto' }}>
       <form className="card-body" onSubmit={handleSubmit}>
@@ -80,35 +133,43 @@ function OrderForm() {
           <label htmlFor="phone">Телефон</label>
           <input
             name="phone"
-            className="form-control mt-2"
             id="phone"
             placeholder="Ваш телефон"
             type="tel"
-            value={form.phone}
-            onChange={handleChange}
-            minLength={6}
-            maxLength={11}
-            required
+            className={phoneClasses}
+            value={phoneValue}
+            onChange={phoneChangeHandler}
+            onBlur={phoneBlurHandler}
           />
+          {phoneHasError && (
+            <p className="error-text">
+              Пожалуйста, введите корректный номер телефона
+            </p>
+          )}
         </div>
         <div className="form-group mb-3">
           <label htmlFor="address ">Адрес доставки</label>
           <input
             name="address"
-            className="form-control mt-2"
             id="address"
             placeholder="Адрес доставки"
-            value={form.address}
-            onChange={handleChange}
-            required
+            className={addressClasses}
+            value={addressValue}
+            onChange={addressChangeHandler}
+            onBlur={addressBlurHandler}
           />
+          {addressHasError && (
+            <p className="error-text">
+              Нам нужно не менее пяти символов чтобы определить ваш адрес
+            </p>
+          )}
         </div>
         <div className="form-group form-check mb-3">
           <input
             type="checkbox"
-            className="form-check-input"
             id="agreement"
-            required
+            className={checkboxClasses}
+            onClick={handleCheckboxCkick}
           />
           <label className="form-check-label" htmlFor="agreement">
             Согласен с правилами доставки
@@ -120,12 +181,13 @@ function OrderForm() {
   );
 
   const sendingError = (
-    <>
-      <div className="alert alert-danger text-center" role="alert">
-        {error.message}
-      </div>
-      {section}
-    </>
+    <div
+      className="alert alert-danger text-center"
+      role="alert"
+      style={{ marginTop: '20px' }}
+    >
+      {error.message}
+    </div>
   );
 
   const sentSuccessfully = (
@@ -150,7 +212,7 @@ function OrderForm() {
         {!numberOfItems && noItems}
         {numberOfItems > 0 && section}
         {numberOfItems > 0 && loading && <Preloader />}
-        {error.status && sendingError}
+        {numberOfItems > 0 && error.status && sendingError}
         {sent && sentSuccessfully}
       </section>
     </>

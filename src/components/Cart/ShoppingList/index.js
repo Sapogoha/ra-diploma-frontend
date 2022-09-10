@@ -3,23 +3,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   selectCart,
-  selectSum,
   removeFromCart,
   selectNumberOfItems,
   updateProduct,
   selectNewPrice,
   selectLoading,
-} from '../../../slices/cartSlice';
-import { refreshPrice } from '../../../thunks/asyncThunks';
+} from '../../../store/slices/cartSlice';
+import { refreshPrice } from '../../../store/thunks/asyncThunks';
 import Preloader from '../../Preloader';
 
 function ShoppingList() {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
-  const sum = useSelector(selectSum);
   const numberOfItems = useSelector(selectNumberOfItems);
   const newPrice = useSelector(selectNewPrice);
   const loading = useSelector(selectLoading);
+
+  const sum = cart.reduce((curNumber, item) => {
+    return curNumber + item.price * item.quantity;
+  }, 0);
 
   const ids = useMemo(
     () =>
@@ -33,7 +35,6 @@ function ShoppingList() {
 
   const handleClickUpdate = (id) => {
     const toUpdate = ids.find((item) => item.id === id);
-    console.log(toUpdate);
     dispatch(updateProduct({ id, size: toUpdate.size, price: newPrice.price }));
   };
 

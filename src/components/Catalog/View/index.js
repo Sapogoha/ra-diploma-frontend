@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { fetchCatalog, fetchMoreItems } from '../../../thunks/asyncThunks';
+
+import {
+  fetchCatalog,
+  fetchMoreItems,
+} from '../../../store/thunks/asyncThunks';
 import {
   selectCatalog,
   selectLoading,
@@ -9,13 +13,15 @@ import {
   selectLoadingNewItems,
   selectShowFetchMoreButton,
   selectEndOfList,
-} from '../../../slices/catalogSlice';
+} from '../../../store/slices/catalogSlice';
 import {
   selectActiveCategory,
   selectLoading as selectLoadingCategories,
   selectError as selectCategoriesError,
-} from '../../../slices/categoriesSlice';
-import { selectSearch, resetSearch } from '../../../slices/searchSlice';
+} from '../../../store/slices/categoriesSlice';
+import { selectSearch, resetSearch } from '../../../store/slices/searchSlice';
+
+import ErrorHappened from '../../UI/ErrorHappened';
 import Preloader from '../../Preloader';
 import links from '../../../common/links';
 
@@ -89,16 +95,17 @@ function CatalogView() {
     </>
   );
 
-  const errorHappened = (
+  const message = (
     <>
-      <div className="alert alert-warning text-center" role="alert">
-        {error.message}
-        <div>Нажмите на кнопку ниже, а затем повторите поиск</div>
-      </div>
-      <button className="btn btn-outline-primary" onClick={handleReload}>
-        Загрузить товары
-      </button>
+      {error.message}
+      <div>Нажмите на кнопку ниже, а затем повторите поиск</div>
     </>
+  );
+
+  const errorHappened = (
+    <ErrorHappened message={message} onClick={handleReload}>
+      Загрузить товары
+    </ErrorHappened>
   );
 
   const handleClick = () => {
