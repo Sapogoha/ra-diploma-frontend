@@ -61,7 +61,7 @@ function ProductItem() {
   };
 
   const handleClick = (size) => {
-    selectedSize === null ? setSelectedSize(size) : setSelectedSize(null);
+    selectedSize === size ? setSelectedSize(null) : setSelectedSize(size);
   };
 
   const addToCartHandler = () => {

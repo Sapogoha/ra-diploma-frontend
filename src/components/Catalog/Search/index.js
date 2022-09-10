@@ -18,7 +18,7 @@ function CatalogSearch() {
   }, [search]);
 
   const handleChange = (event) => {
-    if (search.trim === '') {
+    if (search.trim() === '') {
       return;
     }
     dispatch(changeSearch(event.target.value));
