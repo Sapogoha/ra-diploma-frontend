@@ -5,6 +5,8 @@ import { changeSearch, selectSearch } from '../../../store/slices/searchSlice';
 import { fetchCatalog } from '../../../store/thunks/asyncThunks';
 import { selectActiveCategory } from '../../../store/slices/categoriesSlice';
 
+import useDebounce from '../../../hooks/useDebounce';
+
 function CatalogSearch() {
   const dispatch = useDispatch();
   const search = useSelector(selectSearch);
@@ -17,21 +19,26 @@ function CatalogSearch() {
     });
   }, [search]);
 
-  const handleChange = (event) => {
-    dispatch(changeSearch(event.target.value));
-  };
+  const debouncedSearch = useDebounce(search, 500);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  useEffect(() => {
     if (search.trim() === '') {
       return;
     }
 
-    dispatch(fetchCatalog({ id: activeCategoryId, query: search }));
+    if (debouncedSearch) {
+      dispatch(fetchCatalog({ id: activeCategoryId, query: search }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, activeCategoryId]);
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    dispatch(changeSearch(event.target.value));
   };
 
   return (
-    <form onSubmit={handleSubmit} className="catalog-search-form form-inline">
+    <form className="catalog-search-form form-inline">
       <input
         value={search}
         ref={textInput}

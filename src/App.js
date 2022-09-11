@@ -11,8 +11,6 @@ import ProductPage from './pages/ProductPage';
 
 import links from './common/links';
 
-import './App.css';
-
 function App() {
   return (
     <BrowserRouter>
