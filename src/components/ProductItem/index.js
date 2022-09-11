@@ -92,18 +92,22 @@ function ProductItem() {
   const noSizes = <span> в данный момент товара нет в наличиии</span>;
 
   const addToCartBtn = (
-    <button
-      onClick={addToCartHandler}
-      className="btn btn-danger btn-block btn-lg"
-    >
-      В корзину
-    </button>
+    <div className="d-grid gap-2">
+      <button
+        onClick={addToCartHandler}
+        className="btn btn-danger btn-block btn-lg "
+      >
+        В корзину
+      </button>
+    </div>
   );
 
   const addToCartInactive = (
-    <button className="btn btn-secondary btn-block btn-lg">
-      Сначала выберите размер
-    </button>
+    <div className="d-grid gap-2">
+      <button className="btn btn-secondary btn-block btn-lg" disabled>
+        Сначала выберите размер
+      </button>
+    </div>
   );
 
   const quantityBlock = (

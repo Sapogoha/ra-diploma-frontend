@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Banner from '../components/Banner';
 import Error from '../components/Error';
+import Layout from '../layout/Layout';
 
 function ErrorPage() {
   return (
     <>
-      <Banner />
-      <Error />
+      <Layout>
+        <Error />
+      </Layout>
     </>
   );
 }

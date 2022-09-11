@@ -1,10 +1,10 @@
 const links = {
   main: '/',
-  about: '/about.html',
-  cart: '/cart.html',
-  catalog: '/catalog.html',
-  product: '/catalog/:id.html',
-  contacts: '/contacts.html',
+  about: '/about',
+  cart: '/cart',
+  catalog: '/catalog',
+  product: '/catalog/:id',
+  contacts: '/contacts',
 };
 
 export default links;

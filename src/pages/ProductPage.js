@@ -1,15 +1,14 @@
 import React from 'react';
-// import { useParams } from 'react-router-dom';
 
-import Banner from '../components/Banner';
 import ProductItem from '../components/ProductItem';
+import Layout from '../layout/Layout';
 
 function ProductPage() {
-  // const { id } = useParams();
   return (
     <>
-      <Banner />
-      <ProductItem />
+      <Layout>
+        <ProductItem />
+      </Layout>
     </>
   );
 }

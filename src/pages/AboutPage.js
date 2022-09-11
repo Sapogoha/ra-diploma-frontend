@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Banner from '../components/Banner';
 import About from '../components/About';
+import Layout from '../layout/Layout';
 
 function AboutPage() {
   return (
     <>
-      <Banner />
-      <About />
+      <Layout>
+        <About />
+      </Layout>
     </>
   );
 }
