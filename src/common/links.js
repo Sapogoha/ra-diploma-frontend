@@ -1,10 +1,12 @@
+const startName = '/ra-diploma-frontend';
+
 const links = {
-  main: '/',
-  about: '/about.html',
-  cart: '/cart.html',
-  catalog: '/catalog.html',
-  product: '/catalog/:id.html',
-  contacts: '/contacts.html',
+  main: startName,
+  about: `${startName}/about`,
+  cart: `${startName}/cart`,
+  catalog: `${startName}/catalog`,
+  product: `${startName}/catalog/:id`,
+  contacts: `${startName}/contacts`,
 };
 
 export default links;

@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Banner from '../components/Banner';
 import Contacts from '../components/Contacts';
+import Layout from '../layout/Layout';
 
 function ContactsPage() {
   return (
     <>
-      <Banner />
-      <Contacts />
+      <Layout>
+        <Contacts />
+      </Layout>
     </>
   );
 }

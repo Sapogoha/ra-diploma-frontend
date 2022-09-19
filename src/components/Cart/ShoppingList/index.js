@@ -12,6 +12,8 @@ import {
 import { refreshPrice } from '../../../store/thunks/asyncThunks';
 import Preloader from '../../Preloader';
 
+import links from '../../../common/links';
+
 function ShoppingList() {
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
@@ -51,8 +53,8 @@ function ShoppingList() {
       <div className="alert alert-danger text-center" role="alert">
         <div>
           Изменилась цена товара "
-          <Link to={`/catalog/${newPrice?.id}.html`}>{newPrice?.title}</Link>",
-          новая цена - {newPrice?.price}
+          <Link to={`${links.catalog}/${newPrice?.id}`}>{newPrice?.title}</Link>
+          ", новая цена - {newPrice?.price}
         </div>
         <div className="m-2" role="group">
           <button
@@ -93,7 +95,7 @@ function ShoppingList() {
             <tr key={item.id}>
               <td>{index + 1}</td>
               <td>
-                <Link to={`/catalog/${item.id}.html`}>
+                <Link to={`${links.catalog}/${item.id}`}>
                   <div>{item.title}</div>
                 </Link>
               </td>

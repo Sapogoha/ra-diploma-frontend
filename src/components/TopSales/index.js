@@ -12,6 +12,8 @@ import {
   selectError,
 } from '../../store/slices/topSalesSlice';
 
+import links from '../../common/links';
+
 function TopSales() {
   const topSales = useSelector(selectTopSales);
   const loading = useSelector(selectLoading);
@@ -39,7 +41,7 @@ function TopSales() {
               <div className="card-body">
                 <p className="card-text">{item.title}</p>
                 <p className="card-text">{item.price} руб.</p>
-                <Link to={`/catalog/${item.id}.html`}>
+                <Link to={`${links.catalog}/${item.id}`}>
                   <button className="btn btn-outline-primary">Заказать</button>
                 </Link>
               </div>
